@@ -8,7 +8,7 @@ public:
         std::cout << "Parent constructor" << std::endl;
     }
 
-    // if the destructor isn't virtual deleting derived class object won't call derived class destructor
+    //if the destructor isn't virtual deleting derived class object won't call derived class destructor
     virtual ~Parent()
     {
         std::cout << "Destructing Parent" << std::endl;
@@ -33,7 +33,7 @@ public:
         std::cout << "Destructing Child" << std::endl;
     }
 
-    // override forces to override function from parent
+    //override forces to override function from parent
     void foo() override
     {
         std::cout << "Child foo" << std::endl;
@@ -42,7 +42,7 @@ public:
 
 int main()
 {
-    Parent *clazz = new Child;
+    Parent * clazz = new Child;
 
     clazz->foo();
 
