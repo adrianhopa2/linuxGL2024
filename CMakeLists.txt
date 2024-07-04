@@ -7,7 +7,8 @@ project("LinuxPlayground"  LANGUAGES CXX)
 #Chapter 00 -> origin
 add_subdirectory(chapter_00)
 
-
 add_subdirectory(chapter_01)
+
+add_subdirectory(chapter_02)
 
 
