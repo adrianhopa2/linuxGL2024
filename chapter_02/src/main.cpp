@@ -44,7 +44,7 @@ int main()
 {
     Parent * clazz = new Child;
 
-    clazz->foo(5);
+    clazz->foo(83);
 
     delete clazz;
 
