@@ -14,9 +14,9 @@ public:
         std::cout << "Destructing Parent" << std::endl;
     }
 
-    virtual void foo()
+    virtual void foo(int i)
     {
-        std::cout << "Parent foo" << std::endl;
+        std::cout << "Parent foo " << i << std::endl;
     }
 };
 
@@ -34,9 +34,9 @@ public:
     }
 
     //override forces to override function from parent
-    void foo() override
+    void foo(int i) override
     {
-        std::cout << "Child foo" << std::endl;
+        std::cout << "Child foo " << i << std::endl;
     }
 };
 
@@ -44,7 +44,7 @@ int main()
 {
     Parent * clazz = new Child;
 
-    clazz->foo();
+    clazz->foo(5);
 
     delete clazz;
 
