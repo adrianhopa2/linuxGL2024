@@ -44,6 +44,7 @@ int main()
 {
     Parent * clazz = new Child;
 
+    //function from child is called
     clazz->foo(83);
 
     delete clazz;
