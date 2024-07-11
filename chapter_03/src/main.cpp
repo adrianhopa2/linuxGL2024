@@ -1,6 +1,6 @@
 #include <iostream>
 #include <memory>
-using namespace std;
+
 
 class customIntAllocator
 {
@@ -41,7 +41,7 @@ int main()
 
 
     //custom int allocator
-    shared_ptr<customIntAllocator> ptr2 = std::make_shared<customIntAllocator>(42);
+    std::shared_ptr<customIntAllocator> ptr2 = std::make_shared<customIntAllocator>(42);
 
     std::cout << ptr2.use_count() << std::endl;
     std::cout << ptr2->getInt() << std::endl << std::endl;
