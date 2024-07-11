@@ -26,8 +26,8 @@ public:
 
 int main()
 {
-    SmartPointer sptr(new int());
-    *sptr = 7;
+    SmartPointer sptr(new int(7));
+
     std::cout << *sptr << std::endl;
 
     return 0;
