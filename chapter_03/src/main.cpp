@@ -1,53 +1,84 @@
 #include <iostream>
-#include <memory>
+#include <cstdint>
 
-
-class customIntAllocator
+class CustomIntAllocator
 {
-private:
-    int value;
-
 public:
-    customIntAllocator(int v = 0) : value{v}
+    CustomIntAllocator()
     {
-        std::cout << "Custom Int Allocated" << std::endl;
+        std::cout << "Default constructor " << std::endl;
     }
 
-    ~customIntAllocator()
+    CustomIntAllocator(int *newValue) : value(newValue)
     {
-        std::cout << "Custom Int Destructor" << std::endl;
+        std::cout << "Storing value " << *value << std::endl;
     }
 
-    int getInt()
+    CustomIntAllocator(const CustomIntAllocator &other) : value(other.value)
     {
-        return value;
+        std::cout << "Copying value " << std::endl;
     }
 
+    CustomIntAllocator &operator=(const CustomIntAllocator &other)
+    {
+        if (this != &other)
+        {
+            value = other.value;
+        }
+        std::cout << "Operator copying value " << std::endl;
+        return *this;
+    }
+
+    CustomIntAllocator(CustomIntAllocator &&other) noexcept : value(other.value)
+    {
+        other.value = nullptr;
+        std::cout << "Moving value " << std::endl;
+    }
+
+    CustomIntAllocator &operator=(CustomIntAllocator &&other)
+    {
+        if (this != &other)
+        {
+            value = other.value;
+            other.value = nullptr;
+        }
+        std::cout << "Operator moving value " << std::endl;
+        return *this;
+    }
+
+    ~CustomIntAllocator()
+    {
+        std::cout << "Freeing value ";
+        if (value != nullptr)
+        {
+            std::cout << *value << std::endl;
+        }
+        else
+        {
+            std::cout << "null" << std::endl;
+        }
+    }
+
+private:
+    int *value{nullptr};
 };
-
-
-
 
 int main()
 {
-    // custom deleter
-    std::shared_ptr<int> ptr(new int(42), [](int *storedValue)
-                             { 
-        std::cout << "deleting" << std::endl;
-        delete storedValue; });
 
-    std::cout << ptr.use_count() << std::endl;
-    std::cout << *ptr << std::endl << std::endl;
+    CustomIntAllocator pointer1{new int(42)};
 
+    CustomIntAllocator pointer2{pointer1};
 
-    //custom int allocator
-    std::shared_ptr<customIntAllocator> ptr2 = std::make_shared<customIntAllocator>(42);
+    CustomIntAllocator pointer3;
+    pointer3 = pointer2;
 
-    std::cout << ptr2.use_count() << std::endl;
-    std::cout << ptr2->getInt() << std::endl << std::endl;
+    CustomIntAllocator pointer4 = std::move(pointer1);
 
+    CustomIntAllocator pointer5;
+    pointer5 = std::move(pointer2);
 
-  
+    std::cout << "end of main()" << std::endl;
 
     return 0;
 }
