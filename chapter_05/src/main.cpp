@@ -8,44 +8,56 @@ class SharedPointer
 private:
     T *value;
 
-    // inline static data member can be defined in the class definition and may specify an initializer
-    // works a bit better than in chapter_04, because this is in template, so for every type different reference_counter is created
-    static inline uint reference_counter = 0;
+    uint *m_referenceCounter;
 
 public:
-    SharedPointer(T *newValue = nullptr) : value(newValue)
+    SharedPointer(T *newValue = nullptr) : value(newValue), m_referenceCounter(new uint(0))
     {
-        reference_counter++;
-
-        std::cout << "default constructor\t";
-
+        // increment m_referenceCounter only if pointing to a value
         if (value)
         {
-            show();
+            (*m_referenceCounter)++;
+        }
+
+        std::cout << "default constructor\t";
+        show();
+    }
+
+    SharedPointer(SharedPointer &other)
+    {
+        // copy only if other is pointing to a value
+        // else set as nullptr
+        if (other.value)
+        {
+            value = other.value;
+            m_referenceCounter = other.m_referenceCounter;
+            (*m_referenceCounter)++;
         }
         else
         {
-            std::cout << "\t\treference_counter=" << reference_counter << std::endl;
+            value = nullptr;
+            m_referenceCounter = new uint(0);
         }
+
+        std::cout << "Copying constructor\t";
+        show();
     }
 
     ~SharedPointer()
     {
 
-        std::cout << "destructor\t";
-
-        // check to decrement only when pointer is not null
         if (value)
         {
-            reference_counter--;
+            (*m_referenceCounter)--;
         }
 
+        std::cout << "destructor\t";
         show();
 
-        // delete when counter reaches zero
-        if (reference_counter == 0)
+        if (*m_referenceCounter == 0)
         {
             delete value;
+            delete m_referenceCounter;
             std::cout << "memory freed" << std::endl;
         }
     }
@@ -54,27 +66,51 @@ public:
     {
         if (value)
         {
-            std::cout << "reference_counter=" << reference_counter << "\tvalue=" << *value << std::endl;
+            std::cout << "m_referenceCounter=" << *m_referenceCounter << "\tvalue=" << *value << std::endl;
         }
         else
         {
-            std::cout << "reference_counter=" << reference_counter << "\tvalue=null" << std::endl;
+            std::cout << "m_referenceCounter=" << *m_referenceCounter << "\tvalue=null" << std::endl;
         }
     }
 
     void setValue(T n)
     {
-        *value = n;
+        //check if not a nullptr
+        if (value)
+        {
+            *value = n;
+        }
     }
 };
 
 int main()
 {
 
-    SharedPointer sp1(new double(25.2));
+    SharedPointer sp1(new int(9));
+    SharedPointer sp2(sp1);
+    SharedPointer sp3(new int(21));
+    SharedPointer sp4(sp1);
+    SharedPointer sp5(new double(12.8));
+    SharedPointer sp6(new char('g'));
+    SharedPointer sp7(new std::string("hello"));
 
-    SharedPointer sp4(new char('f'));
-    SharedPointer sp5(new char('g'));
+    sp2.setValue(7);
+
+    std::cout << "\nsp1: ";
+    sp1.show();
+    std::cout << "sp2: ";
+    sp2.show();
+    std::cout << "sp3: ";
+    sp3.show();
+    std::cout << "sp4: ";
+    sp4.show();
+    std::cout << "sp5: ";
+    sp5.show();
+    std::cout << "sp6: ";
+    sp6.show();
+    std::cout << "sp7: ";
+    sp7.show();
 
     std::cout << "\nend of main()\n";
     std::cout << std::endl;
