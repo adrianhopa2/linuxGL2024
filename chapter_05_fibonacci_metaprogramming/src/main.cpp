@@ -1,33 +1,37 @@
 #include <iostream>
 
 
-template<unsigned int N>
-struct fibonacci
+// Calculate the value passed as T
+template <int T>
+struct Fibonacci
 {
-    static constexpr int64_t value =
-        fibonacci<N - 2>::value +
-        fibonacci<N - 1>::value;
+    enum { value = (Fibonacci<T - 1>::value + Fibonacci<T - 2>::value) };
 };
 
-template<>
-struct fibonacci<0>
+// In the template meta-programming, we do not have conditionals, so instead
+// we use struct-overloading like mechanism to set constraints, we do this for
+// numbers 0, 1 and 2, just like our algorithm in the function above.
+template <>
+struct Fibonacci<0>
 {
-    static constexpr int64_t value = 0;
+    enum { value = 1 };
 };
 
-template<>
-struct fibonacci<1>
+template <>
+struct Fibonacci<1>
 {
-    static constexpr int64_t value = 1;
+    enum { value = 1 };
 };
 
+template <>
+struct Fibonacci<2>
+{
+    enum { value = 1 };
+};
 
+// in the end, we get the value 
 int main()
 {
-
-    constexpr auto fib = fibonacci<92>::value;
-
-    std::cout << fib << std::endl;
-
-    return 0;
+    int x = Fibonacci<45>::value;
+    std::cout << x << std::endl;
 }
