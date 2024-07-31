@@ -18,3 +18,5 @@ add_subdirectory(chapter_04)
 add_subdirectory(chapter_05)
 add_subdirectory(chapter_05_fibonacci_metaprogramming)
 add_subdirectory(chapter_05_fibonacci_runtime)
+
+add_subdirectory(chapter_06)
