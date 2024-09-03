@@ -11,29 +11,23 @@ int main()
         bool active = true;
         while (active)
         {
-            
-            if (t_mutex.try_lock())
+
+            t_mutex.lock();
+            for (int i = 0; i < 10; i++)
             {
-                for (int i = 0; i < 10; i++)
+
+                if (var == 0)
                 {
-
-                    if (var == 0)
-                    {
-                        t_mutex.unlock();
-                        active = false;
-                        break;
-                    }
-                    std::cout << "Thread " << id << ", logging " << var << std::endl;
-                    var--;
+                    active = false;
+                    break;
                 }
+                std::cout << "Thread " << id << ", logging " << var << std::endl;
 
-                
-
-                t_mutex.unlock();
-                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                var--;
             }
+            t_mutex.unlock();
 
-            
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
     };
 
