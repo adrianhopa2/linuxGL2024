@@ -11,18 +11,21 @@ int main()
         bool active = true;
         while (active)
         {
-            for (int i = 0; i < 10; i++)
             {
                 std::lock_guard<std::mutex> guard(t_mutex);
 
-                if (var == 0)
+                for (int i = 0; i < 10; i++)
                 {
-                    active = false;
-                    break;
-                }
-                std::cout << "Thread " << id << ", logging " << var << std::endl;
 
-                var--;
+                    if (var == 0)
+                    {
+                        active = false;
+                        break;
+                    }
+                    std::cout << "Thread " << id << ", logging " << var << std::endl;
+
+                    var--;
+                }
             }
 
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
