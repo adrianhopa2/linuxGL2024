@@ -11,10 +11,9 @@ int main()
         bool active = true;
         while (active)
         {
-
-            t_mutex.lock();
             for (int i = 0; i < 10; i++)
             {
+                std::lock_guard<std::mutex> guard(t_mutex);
 
                 if (var == 0)
                 {
@@ -25,23 +24,22 @@ int main()
 
                 var--;
             }
-            t_mutex.unlock();
 
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
     };
 
-    std::thread t1(func, 1);
-    std::thread t2(func, 2);
-    std::thread t3(func, 3);
+    std::jthread t1(func, 1);
+    std::jthread t2(func, 2);
+    std::jthread t3(func, 3);
 
-    t1.join();
-    t2.join();
-    t3.join();
-
-    if (var == 0)
+    while (true)
     {
-        std::cout << "Buffer is empty, program is terminating." << std::endl;
+        if (var == 0)
+        {
+            std::cout << "Buffer is empty, program is terminating." << std::endl;
+            break;
+        }
     }
 
     return 0;
