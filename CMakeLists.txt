@@ -22,3 +22,5 @@ add_subdirectory(chapter_05_fibonacci_runtime)
 add_subdirectory(chapter_06)
 
 add_subdirectory(chapter_07)
+
+add_subdirectory(chapter_08)
